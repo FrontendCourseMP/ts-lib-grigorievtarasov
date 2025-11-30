@@ -1,3 +1,6 @@
+type PossibleTypes = string | number | boolean;
+
+
 export type ValidatorMessage = string;
 
 export type ValidatorError = {
@@ -8,7 +11,7 @@ export type ValidatorError = {
 export type ValidationResult = {
     isOk: boolean,
     errors: ValidatorError[],
-    values?: Record<string, any>
+    values?: Record<string, PossibleTypes>
 }
 
 
@@ -16,7 +19,7 @@ export interface BaseChain {
     required(message?: ValidatorMessage): this,
 
     custom(
-        validator: (raw: any) => boolean,
+        validator: (raw: PossibleTypes) => boolean,
         message?: ValidatorMessage
     ): this,
 }
@@ -54,4 +57,49 @@ export interface NumberChain extends BaseChain {
     integer(
         message?: string
     ): this
+}
+
+export interface ArrayChain extends BaseChain {
+    min(
+        length: number,
+        message?: ValidatorMessage
+    ): this,
+    
+    max(
+        length: number,
+        message?: ValidatorMessage
+    ): this
+}
+
+
+export interface FieldBuilder {
+    string(): StringChain,
+    number(): NumberChain,
+    array(): ArrayChain
+}
+
+export interface FormValidator {
+    field(name: string): FieldBuilder,
+
+    validate(): Promise<ValidationResult>,
+
+    validateField(name: string): Promise<ValidationResult>,
+
+    getRawValues(): Record<string, PossibleTypes>,
+
+    setError(
+        fieldsName: string, 
+        message: string
+    ): void,
+
+    clearError(fieldsName: string): void,
+
+    clearErrors(): void
+}
+
+
+export const d = {
+    form(form: HTMLFormElement): FormValidator {
+        throw new Error(`Вы использовали заглушку, форма ${form} не валидируется`) // Не знал, как ещё сделать это `import * as z from 'zod'`
+    }
 }
