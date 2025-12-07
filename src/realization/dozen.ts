@@ -1,4 +1,6 @@
-import type {FormValidator, ValidatorError} from '../types/types.ts'
+import type {FieldBuilder, FormValidator, PossibleTypes, ValidatorError, ValidationResult} from '../types/types.ts'
+import { Builder } from './fieldBuilder.ts'
+import { rules } from './chains.ts'
 
 
 function isInputElement(element: Element | null): element is HTMLInputElement {
@@ -28,7 +30,9 @@ function formElementsFilter<T extends Element>(
 } 
 
 
-const d = {
+export const d = {
+    errors: [] as ValidatorError[],
+    
     form(form: HTMLFormElement): FormValidator {
         const inputs: HTMLInputElement[] = formElementsFilter(form, isInputElement);
         const descriptors = new Map<HTMLInputElement, TextElement>();
@@ -49,7 +53,7 @@ const d = {
                 if (!isTextElement(desc)) {
                     this.errors.push({
                         fieldsName: input.name || input.id || 'unknown',
-                        message: "Ddescribed-by element not found or incorrect type",
+                        message: `Described-by element #${descId} not found or incorrect type`,
                     });
                 }
 
@@ -58,7 +62,91 @@ const d = {
                 }
             }
         }
+
+        const errors: Record<string, string[]> = {};
+        const values: Record<string, PossibleTypes> = {};
+
+        const api: FormValidator = {
+            field(name: string): FieldBuilder {
+                return Builder(name)
+            },
+
+            getErrorsAsArray(): ValidatorError[] {
+                const arr: ValidatorError[] = [];
+
+                for (const name in errors) {
+                    for (const msg of errors[name]) {
+                        arr.push({
+                            fieldsName: name,
+                            message: msg,
+                        });
+                    }
+                }
+
+                return arr
+            },
+
+            async validate(): Promise<ValidationResult> {
+                this.clearErrors();
+                this.getRawValues();
+
+                for (const [field, fns] of rules.entries()) {
+                    const value = values[field];
+
+                    for (const func of fns) {
+                        const error = func(value);
+
+                        if (error) {
+                            this.setError(field, error);
+                        }
+                    }
+                }
+
+                return {
+                    isOk: Object.keys(errors).length === 0,
+                    errors: this.getErrorsAsArray(),
+                    values,
+                }
+            },
+
+            async validateField(name: string): Promise<ValidationResult> {
+                return {
+                    isOk: !errors[name]?.length,
+                    errors: errors[name]?.map((msg) => ({
+                        fieldsName: name,
+                        message: msg,
+                    })) || [],
+                    values,
+                }
+            },
+
+            getRawValues(): Record<string, PossibleTypes> {
+                for (const input of inputs) {
+                    values[input.name] = input.value;
+                }
+
+                return values
+            },
+
+            setError(fieldsName: string, message: string) {
+                if (!errors[fieldsName]) {
+                    errors[fieldsName] = [];
+                }
+
+                errors[fieldsName].push(message);
+            },
+
+            clearError(fieldsName: string) {
+                delete errors[fieldsName];
+            },
+
+            clearErrors() {
+                for (const k in errors) {
+                    delete errors[k];
+                }
+            }
+        };
+
+        return api
     },
-    
-    errors: [] as ValidatorError[], 
 }

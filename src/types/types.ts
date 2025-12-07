@@ -76,6 +76,8 @@ export interface FieldBuilder {
 export interface FormValidator {
     field(name: string): FieldBuilder,
 
+    getErrorsAsArray(): ValidatorError[],
+
     validate(): Promise<ValidationResult>,
 
     validateField(name: string): Promise<ValidationResult>,
