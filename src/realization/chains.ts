@@ -15,7 +15,7 @@ export function stringChain(fieldsName: string): StringChain {
     return {
         required(message = 'Field is missing') {
             addRule(fieldsName, (value) => {
-                value ? null : message;
+                return value ? null : message;
             });
 
             return this
@@ -23,7 +23,7 @@ export function stringChain(fieldsName: string): StringChain {
 
         min(length: number, message: string = 'String is shorter than it should be') {
             addRule(fieldsName, (value) => {
-                typeof value === "string" && value.length < length ? message : null;
+                return typeof value === "string" && value.length < length ? message : null;
             });
 
             return this
@@ -31,7 +31,7 @@ export function stringChain(fieldsName: string): StringChain {
         
         max(length: number, message: string = 'String is longer than it should be') {
             addRule(fieldsName, (value) => {
-                typeof value === "string" && value.length < length ? message : null;
+                return typeof value === "string" && value.length > length ? message : null;
             });
 
             return this
@@ -39,7 +39,7 @@ export function stringChain(fieldsName: string): StringChain {
 
         pattern(regex: RegExp, message: string = 'Regular expression error') {
             addRule(fieldsName, (value) => {
-                typeof value === 'string' && !regex.test(value) ? message : null
+                return typeof value === 'string' && !regex.test(value) ? message : null
             });
 
             return this
@@ -55,7 +55,7 @@ export function numberChain(fieldsName: string): NumberChain {
     return {
         required(message = 'Field is missing') {
             addRule(fieldsName, (value) => {
-                value ? null : message;
+                return value ? null : message;
             });
 
             return this
@@ -63,7 +63,7 @@ export function numberChain(fieldsName: string): NumberChain {
 
         min(n: number, message: string = 'Number is lower than it should be') {
             addRule(fieldsName, (value) => {
-                Number(value) < n ? message : null;
+                return Number(value) < n ? message : null;
             });
 
             return this
@@ -71,7 +71,7 @@ export function numberChain(fieldsName: string): NumberChain {
         
         max(n: number, message: string = 'Number is higher than it should be') {
             addRule(fieldsName, (value) => {
-                Number(value) > n ? message : null;
+                return Number(value) > n ? message : null;
             });
 
             return this
@@ -79,7 +79,7 @@ export function numberChain(fieldsName: string): NumberChain {
 
         integer(message: string = 'Number must be integer') {
             addRule(fieldsName, (value) => {
-                Number.isInteger(Number(value)) ? null : message;
+                return Number.isInteger(Number(value)) ? null : message;
             });
 
             return this
@@ -90,25 +90,25 @@ export function numberChain(fieldsName: string): NumberChain {
 export function arrayChain(fieldName: string): ArrayChain {
     return {
         required(message = 'Field is required') {
-            addRule(fieldName, (value) =>
-                value && value.length ? null : message
-            );
+            addRule(fieldName, (value) => {
+                return value && value.length ? null : message
+            });
 
             return this;
         },
 
         min(length: number, message = `Must contain at least ${length} items`) {
-            addRule(fieldName, (value) =>
-                Array.isArray(value) && value.length < length ? message : null
-            );
+            addRule(fieldName, (value) => {
+                return Array.isArray(value) && value.length < length ? message : null
+            });
 
             return this;
         },
 
         max(length: number, message = `Must contain at most ${length} items`) {
-            addRule(fieldName, (value) =>
-                Array.isArray(value) && value.length > length ? message : null
-            );
+            addRule(fieldName, (value) => {
+                return Array.isArray(value) && value.length > length ? message : null
+            });
 
             return this;
         },

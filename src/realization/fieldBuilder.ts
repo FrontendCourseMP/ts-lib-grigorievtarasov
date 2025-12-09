@@ -6,7 +6,7 @@ export function Builder(fieldsName: string): FieldBuilder {
     return {
         string() {
             addRule(fieldsName, (value: any) => {
-                typeof value === 'string' ? null : 'Must be a string';
+                return typeof value === 'string' ? null : 'Must be a string';
             });
 
             return stringChain(fieldsName)
@@ -14,7 +14,7 @@ export function Builder(fieldsName: string): FieldBuilder {
 
         number() {
             addRule(fieldsName, (value: any) => {
-                isNaN(Number(value)) ? 'Must be a number' : null;
+                return isNaN(Number(value)) ? 'Must be a number' : null;
             });
 
             return numberChain(fieldsName)
@@ -22,7 +22,7 @@ export function Builder(fieldsName: string): FieldBuilder {
 
         array() {
             addRule(fieldsName, (value: any) => {
-                Array.isArray(value) ? null : 'Must be an array';
+                return Array.isArray(value) ? null : 'Must be an array';
             });
 
             return arrayChain(fieldsName)

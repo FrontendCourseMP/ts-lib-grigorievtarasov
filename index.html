@@ -3,15 +3,44 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./src/style.css">
     <title>ts-val</title>
   </head>
   <body>
-    <main>
+    <main id="app">
       <section>
         <form novalidate>
-          <label>Имя <input type="text" required></label>
-          <p role="alert" aria-live="assertive"></p>
-          <button type="submit">Отправить</button>
+          <label for="name">Имя *</label>
+          <input type="text" id="name" name="name" required aria-describedby="name-error">
+          <p id="name-error" class="error-message" role="alert" aria-live="assertive"></p>
+          
+          <label for="email">Email *</label>
+          <input type="email" id="email" name="email" required aria-describedby="email-error">
+          <p id="email-error" class="error-message" role="alert" aria-live="assertive"></p>
+
+          <label for="phone">Телефон</label>
+          <input type="tel" id="phone" name="phone" aria-describedby="phone-error">
+          <p id="phone-error" class="error-message" role="alert" aria-live="assertive"></p>
+          
+          <label for="age">Возраст *</label>
+          <input type="number" id="age" name="age" required aria-describedby="age-error">
+          <p id="age-error" class="error-message" role="alert" aria-live="assertive"></p>
+          
+          <label for="password">Пароль *</label>
+          <input type="password" id="password" name="password" required aria-describedby="password-error">
+          <p id="password-error" class="error-message" role="alert" aria-live="assertive"></p>
+        
+          <label for="confirmPassword">Подтверждение пароля *</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" required aria-describedby="confirmPassword-error">
+          <p id="confirmPassword-error" class="error-message" role="alert" aria-live="assertive"></p>
+        
+          <label>
+            <input type="checkbox" id="agree" name="agree" required>
+            Я согласен с условиями *
+          </label>
+          <p id="agree-error" class="error-message" role="alert" aria-live="assertive"></p>
+
+          <button id="sendBtn" type="submit">Отправить</button>
         </form>
       </section>
     </main>
