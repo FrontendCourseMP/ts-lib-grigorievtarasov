@@ -1,14 +1,7 @@
-import { d } from './realization/dozen.ts';
+import { d } from './realization/dozen';
 
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.querySelector('#testForm') as HTMLFormElement;
-    const validateAllBtn = document.querySelector('#validateAllBtn') as HTMLButtonElement;
-    const resultDiv = document.querySelector('#result') as HTMLDivElement;
-    
-    if (!form || !validateAllBtn || !resultDiv) {
-        console.error('Не найдены необходимые элементы на странице');
-        return;
-    }
     
     const validator = d.form(form);
 
@@ -68,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
         rules.get('confirmPassword')!.push(confirmPasswordRule);
     }
     
-    const agreeRule = (value: any) => {
+    const agreeRule = () => {
         const agreeCheckbox = document.querySelector('#agree') as HTMLInputElement;
         if (!agreeCheckbox?.checked) {
             return 'Необходимо согласиться с условиями';
@@ -95,12 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    
-    validateAllBtn.addEventListener('click', async () => {
-        const result = await validator.validate();
-        displayErrors(result.errors);
-    });
-    
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
