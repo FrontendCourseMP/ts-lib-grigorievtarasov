@@ -19,6 +19,10 @@ export interface BaseChain {
     required(message?: ValidatorMessage): this,
 }
 
+export interface BooleanChain extends BaseChain {
+    parse(message?: string): this
+}
+
 export interface StringChain extends BaseChain {
     min(
         length: number,
@@ -70,7 +74,8 @@ export interface ArrayChain extends BaseChain {
 export interface FieldBuilder {
     string(): StringChain,
     number(): NumberChain,
-    array(): ArrayChain
+    array(): ArrayChain,
+    boolean(): BooleanChain
 }
 
 export interface FormValidator {

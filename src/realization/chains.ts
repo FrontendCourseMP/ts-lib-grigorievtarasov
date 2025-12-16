@@ -1,4 +1,4 @@
-import type {StringChain, NumberChain, ArrayChain} from "../types/types.ts";
+import type {StringChain, NumberChain, ArrayChain, BooleanChain} from "../types/types.ts";
 
 
 export const rules = new Map<string, Array<(value: any) => string | null | void>>();
@@ -110,6 +110,33 @@ export function arrayChain(fieldName: string): ArrayChain {
                 return Array.isArray(value) && value.length > length ? message : null
             });
 
+            return this;
+        },
+    };
+}
+
+export function booleanChain(fieldName: string): BooleanChain {
+    return {
+        required(message = 'Field is required') {
+            addRule(fieldName, (value) => {
+                return value ? null : message
+            });
+
+            return this;
+        },
+
+        parse(message = 'Value must be a boolean') {
+            addRule(fieldName, (value) => {
+                if (value === 'true' || value === 'false') {
+                    return null;
+                }
+
+                if (value === true || value === false) {
+                    return null;
+                }
+
+                return message;
+            });
             return this;
         },
     };

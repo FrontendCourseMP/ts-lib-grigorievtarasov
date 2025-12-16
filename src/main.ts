@@ -8,42 +8,48 @@ document.addEventListener('DOMContentLoaded', () => {
     validator
         .field('name')
         .string()
-        .required('Имя обязательно для заполнения')
         .min(2, 'Имя должно содержать минимум 2 символа')
         .max(50, 'Имя должно содержать максимум 50 символов')
+        .required('Имя обязательно для заполнения')
         .trim();
     
     validator
         .field('email')
         .string()
-        .required('Email обязателен для заполнения')
-        .pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Введите корректный email адрес');
+        .pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Введите корректный email адрес')
+        .required('Email обязателен для заполнения');
     
     validator
         .field('age')
         .number()
-        .required('Возраст обязателен для заполнения')
         .min(18, 'Возраст должен быть не менее 18 лет')
         .max(120, 'Введите корректный возраст')
-        .integer('Возраст должен быть целым числом');
+        .integer('Возраст должен быть целым числом')
+        .required('Возраст обязателен для заполнения');
     
     validator
         .field('password')
         .string()
-        .required('Пароль обязателен для заполнения')
         .min(8, 'Пароль должен содержать минимум 8 символов')
         .pattern(/[A-Z]/, 'Пароль должен содержать хотя бы одну заглавную букву')
-        .pattern(/[0-9]/, 'Пароль должен содержать хотя бы одну цифру');
+        .pattern(/[0-9]/, 'Пароль должен содержать хотя бы одну цифру')
+        .required('Пароль обязателен для заполнения');
     
     validator
         .field('confirmPassword')
         .string()
         .required('Подтверждение пароля обязательно');
+
+    validator
+        .field('agree')
+        .boolean()
+        .required('Требуется согласиться с условиями');
     
     validator
         .field('phone')
         .string()
-        .pattern(/^\+?[0-9\s\-\(\)]+$/, 'Введите корректный номер телефона');
+        .pattern(/^\d\(\d{3}\)\d{7}$/, 'Введите корректный номер телефона')
+        .required('Номер телефона обязателен для заполнения');
     
     const rules = (window as any).rules;
     if (rules) {
@@ -104,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
         input.addEventListener('blur', async () => {
             const fieldName = input.name;
             if (fieldName) {
-                const result = await validator.validateField(fieldName);
+                const result = await validator.validate();
                 displayErrors(result.errors);
             }
         });

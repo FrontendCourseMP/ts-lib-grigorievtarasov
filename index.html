@@ -18,8 +18,8 @@
           <input type="email" id="email" name="email" required aria-describedby="email-error">
           <p id="email-error" class="error-message" role="alert" aria-live="assertive"></p>
 
-          <label for="phone">Телефон</label>
-          <input type="tel" id="phone" name="phone" aria-describedby="phone-error">
+          <label for="phone">Телефон *</label>
+          <input type="tel" id="phone" name="phone" required aria-describedby="phone-error">
           <p id="phone-error" class="error-message" role="alert" aria-live="assertive"></p>
           
           <label for="age">Возраст *</label>
@@ -35,10 +35,10 @@
           <p id="confirmPassword-error" class="error-message" role="alert" aria-live="assertive"></p>
         
           <label>
-            <input type="checkbox" id="agree" name="agree" required>
+            <input type="checkbox" id="agree" name="agree" required aria-describedby="agree-error">
             Я согласен с условиями *
+            <p id="agree-error" class="error-message" role="alert" aria-live="assertive"></p>
           </label>
-          <p id="agree-error" class="error-message" role="alert" aria-live="assertive"></p>
 
           <button id="sendBtn" type="submit">Отправить</button>
         </form>

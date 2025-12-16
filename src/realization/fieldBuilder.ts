@@ -1,5 +1,5 @@
 import type { FieldBuilder } from '../types/types'
-import { addRule, stringChain, numberChain, arrayChain } from './chains'
+import { addRule, stringChain, numberChain, arrayChain, booleanChain } from './chains'
 
 
 export function Builder(fieldsName: string): FieldBuilder {
@@ -26,6 +26,14 @@ export function Builder(fieldsName: string): FieldBuilder {
             });
 
             return arrayChain(fieldsName)
+        },
+
+        boolean() {
+            addRule(fieldsName, (value: any) => {
+                return typeof value === 'boolean' ? null : 'Must be a boolean';
+            });
+
+            return booleanChain(fieldsName)
         },
     }
 }

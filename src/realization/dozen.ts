@@ -122,7 +122,11 @@ export const d = {
 
             getRawValues(): Record<string, PossibleTypes> {
                 for (const input of inputs) {
-                    values[input.name] = input.value;
+                    if (input.type === 'checkbox') {
+                        values[input.name] = (input as HTMLInputElement).checked;
+                    } else {
+                        values[input.name] = input.value;
+                    }
                 }
 
                 return values
